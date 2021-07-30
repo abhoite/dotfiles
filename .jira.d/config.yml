@@ -1,0 +1,23 @@
+endpoint: https://syapse.atlassian.net/
+user: abhijit.bhoite@syapse.com
+password-source: keyring
+project: '(CO,IT,DC)'
+myproject: '(CO,DC)'
+queries:
+  todo: |
+    resolution = unresolved {{if .project}}AND project in '{{.project}}'{{end}} AND status = 'To Do'
+  open: |
+    resolution = unresolved {{if .project}}AND project in {{.myproject}}{{end}} AND status = 'Open'
+custom-commands:
+  - name: unassignedsprint
+    help: Display issues in the current CO sprint assigned to me.
+    script: |-
+      {{jira}} list --query "project = CO and assignee is EMPTY and sprint in openSprints() and status in (Blocked, New, \"In Progress\", \"To Do\") ORDER BY Rank asc"
+  - name: myissues
+    help: My issues assigned to me
+    script: |-
+      {{jira}} list --template table --query "resolution = unresolved AND project in (CO, DC) AND status not in (Closed, Done) AND assignee=currentuser()"
+  - name: co
+    help: CO backlog
+    script: |-
+      {{jira}} list --template table --query "project = CO AND created >= -14d AND status not in (Closed) AND creator not in (59fdfc4584e306151b52d9d5, 5cf1441eced9610f1cad3ce9, 5b21303bd519ce11b5e1e2fe, 557058:b5f754cf-954e-49a1-a703-1d424bd549f3, 5a88d6ae0e6608334b46560e) ORDER BY created DESC"

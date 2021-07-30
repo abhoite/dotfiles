@@ -1,0 +1,57 @@
+- defaults:
+    link:
+        create: true
+        relink: true
+
+- clean: ['~']
+
+- create:
+    - ~/docs
+    - ~/data
+    - ~/.config
+    - ~/proj
+    - ~/.tmux
+
+- link:
+    ~/.zsh: .zsh
+    ~/.zshrc: .zshrc
+    ~/.tmux.conf: .tmux.conf
+    ~/.fzf.zsh: .zsh/.fzf.zsh
+    ~/.config/nvim: .config/nvim
+    ~/.jira.d: .jira.d
+    ~/.gitconfig: .gitconfig
+    ~/.p10k.zsh: .p10k.zsh
+    ~/.tmuxinator: .tmuxinator
+    ~/.tmux/airline: airline
+
+- shell:
+    - command: git submodule update --init --recursive
+      description: Installing submodules
+    - command: ./setup.sh
+      description: Executing setup script
+      stdout: true
+      stderr: true
+      stdin: true
+
+# Installing dependencies:
+- brewfile:
+    file: Brewfile
+    stdout: true
+    stderr: true
+
+- shell:
+    - command: if [ ! -f "/usr/local/bin/jira" ]; then wget https://github.com/go-jira/jira/releases/download/v1.0.27/jira-darwin-amd64 -O /usr/local/bin/jira && chmod +x /usr/local/bin/jira; fi
+      description: Installing Jira CLI
+    - command: if [[ ! -d "$HOME"/.oh-my-zsh ]]; then git clone https://github.com/ohmyzsh/ohmyzsh.git "$HOME"/.oh-my-zsh; fi
+      description: Installing oh-my-zsh
+    - command: if [[ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"/themes/powerlevel10k ]]; then git clone --depth=1  https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k; fi
+      description: Installing Powerlevel10k
+    - command: nvim +PlugInstall +qall 2 &>/dev/null
+      description: Installing VIM bundles
+    - command: if [[ ! -d "${ZSH:-$HOME/.oh-my-zsh}"/plugins/zsh-autosuggestions ]]; then git clone https://github.com/zsh-users/zsh-autosuggestions.git ${ZSH:-$HOME/.oh-my-zsh}/plugins/zsh-autosuggestions; fi
+      description: Installing zsh-autosuggestions
+    - command: if [[ ! -d  "${ZSH:-$HOME/.oh-my-zsh}"/plugins/zsh-syntax-highlighting ]]; then git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH:-$HOME/.oh-my-zsh}/plugins/zsh-syntax-highlighting ; fi
+      description: Installing zsh-syntax-highlighting
+    - command: if [[ ! -d  "${ZSH_CUSTOM:=~/.oh-my-zsh/custom}"/plugins/zsh-completions ]]; then git clone https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:=~/.oh-my-zsh/custom}/plugins/zsh-completions; fi
+      description: Installing zsh-completions
+

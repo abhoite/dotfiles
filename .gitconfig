@@ -1,0 +1,19 @@
+[commit]
+	gpgsign = True
+[user]
+	signingkey = 0x58932E9A9E892152
+	name = Abhijit Bhoite
+	email = abhijit.bhoite@syapse.com
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[github]
+	user = abhoite
+[alias]
+	choose-branch = !git --no-pager branch -vv | fzf +m | sed 's/* //' | awk '{print $1}' # branch chooser helper
+    delbranch = !git branch -D $(git choose-branch)
+	gr = log --graph --full-history --all --color --pretty=tformat:"%x1b[31m%h%x09%x1b[32m%d%x1b[0m%x20%s%x20%x1b[33m(%an)%x1b[0m"
+[diff]
+  tool = vimdiff

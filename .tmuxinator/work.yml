@@ -1,0 +1,23 @@
+# ~/.tmuxinator/work.yml
+# you can make as many tabs as you wish...
+
+project_name: work
+project_root: ~/
+tabs:
+  - home:
+      layout: main-vertical
+      panes:
+        - vim .
+        - ls -ltr
+  - zsh: ls -ltr
+  - Sysalt:
+      layout: main-vertical
+      panes:
+        - workon sysalt && cdproject && gcm && gl --ff-only && vim .
+        - workon sysalt && cdproject
+  - K8s:
+      layout: main-vertical
+      panes:
+        - workon sysalt && cd ~/proj/kubernetes && gcm && gl --ff-only && vim .
+        - workon sysalt && cd ~/proj/kubernetes
+  - K9s: k9s
